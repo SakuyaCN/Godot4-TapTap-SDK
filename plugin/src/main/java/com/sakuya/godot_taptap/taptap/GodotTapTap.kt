@@ -7,13 +7,18 @@ import com.tapsdk.bootstrap.TapBootstrap
 import com.tapsdk.bootstrap.account.TDSUser
 import com.tapsdk.bootstrap.exceptions.TapError
 import com.tapsdk.moment.TapMoment
+import com.tapsdk.tapad.CustomUser
+import com.tapsdk.tapad.TapAdConfig
+import com.tapsdk.tapad.TapAdCustomController
+import com.tapsdk.tapad.TapAdLocation
+import com.tapsdk.tapad.TapAdManager
+import com.tapsdk.tapad.TapAdSdk
 import com.tapsdk.tapconnect.TapConnect
 import com.taptap.sdk.Profile
 import com.taptap.sdk.TapLoginHelper
 import com.tds.common.entities.TapAntiAddictionConfig
 import com.tds.common.entities.TapConfig
 import com.tds.common.models.TapRegionType
-
 
 class GodotTapTap(val clientId:String?,
                   val clientToken:String?,
@@ -54,6 +59,37 @@ class GodotTapTap(val clientId:String?,
         }
     }
 
+    fun adnInit(activity: Activity,mediaId:Long,mediaName:String,mediaKey:String){
+        TapAdManager.get().requestPermissionIfNecessary(activity)
+        val config = TapAdConfig.Builder()
+            .withMediaId(mediaId) // 必选参数。为 TapADN 注册的媒体 ID
+            .withMediaName(mediaName) // 必选参数。为 TapADN 注册的媒体名称
+            .withMediaKey(mediaKey) // 必选参数。媒体密钥，可以在TapADN后台查看
+            .withMediaVersion("1") // 必选参数。默认值 "1"
+            .withTapClientId(clientId) // 可选参数。TapTap 开发者中心的游戏 Client ID
+            .enableDebug(true) // 可选参数，是否打开 debug 调试信息输出：true 打开、false 关闭。默认 false 关闭
+            .withGameChannel("TapTap") // 必选参数，渠道
+            .withCustomController(object : TapAdCustomController() {
+
+                // 开发者可以传入 oaid
+                // 信通院 OAID 的相关采集——如何获取 OAID：
+                // 1. 移动安全联盟官网 http://www.msa-alliance.cn/
+                // 2. 信通院统一 SDK 下载 http://msa-alliance.cn/col.jsp?id=120
+                override fun getDevOaid(): String {
+
+                    return "aaa"
+                }
+
+                // 是否允许 SDK 主动获取 ANDROID_ID
+                override fun isCanUseAndroidId(): Boolean {
+                    return true
+                }
+
+            })
+            .build()
+
+        TapAdSdk.init(activity, config)
+    }
 
     /*
     是否登录

@@ -15,10 +15,11 @@ modified: '2024-01-09T14:05:35.170Z'
 * 一键登录
 * 一键防沉迷认证
 * 内嵌动态
+* 激励广告
 _________________
 ## 安装方法
 1. 复制项目本目录下plugin\demo\addons\GodotTapTapSDK文件内全部内容到你的add项目中或者自行编译整个项目。
-  编译命令：./gradlew assemble，编译后的所有东西都在plugin\demo\addons\GodotTapTapSDK
+   编译命令：./gradlew assemble，编译后的所有东西都在plugin\demo\addons\GodotTapTapSDK
 2. 打开项目设置-插件-启用GodotTapTapSDK。
 3. 项目导出时在**自定义构建** 中勾选启动。
 _________________
@@ -57,6 +58,18 @@ signal onAntiAddictionCallback(code)
 60000	动态页面内登录成功
 70000	场景化入口回调
 signal onTapMomentCallBack(code)
+
+来自激励广告的信号
+500 == 广告加载失败
+200 == 广告加载成功 可以播放
+201 == 激励广告已显示
+202 == 激励广告已经关闭
+203 == 视频播放结束
+204 == 视频出错
+205 == 激励任务已完成，游戏可以选择在此时进行玩家奖励
+206 == 激励广告中玩家点击了跳过视频的按钮
+207 == 激励广告点击事件
+signal onRewardVideoAdCallBack(code)
 ```
 ## 函数说明
 ### 登录模块
@@ -118,6 +131,25 @@ func momentOpen(ori)
 > #### 打开内嵌动态
 > - ori int类型，-1默认，0横屏，1竖屏，2随陀螺仪旋转
 _________________
+### 广告模块
+```
+func initAd(mediaId,mediaName,mediaKey)
+```
+> #### 初始化广告sdk
+> - mediaId,mediaName,mediaKey 应用位信息
 
+```
+func initRewardVideoAd(spaceId,rewardName,extraInfo,userId)
+```
+> #### 加载激励广告
+> - spaceId 广告位ID
+> - rewardName 奖励名称
+> - extraInfo 附加信息
+> - userId 用户id
+
+```
+func showRewardVideoAd()
+```
+> #### 播放激励广告
 点击加入Godot交流群：<a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=W4HFsixrp21iVio3jhmalbDgyiuKuVZO&jump_from=webapi&authKey=1qoGS3eG8/2Tx2o4xqfuXERjwR5WuD3eGNPTykoPPeOF97xrkue62ly5utMvn9Aa"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="Godot引擎交流群" title="Godot引擎交流群"></a>
 或手动搜索：722737499

@@ -8,7 +8,7 @@ plugins {
 
 // TODO: Update value to your plugin's name.
 val pluginName = "GodotTapTapSDK"
-
+var tapVersion = "3.27.0"
 // TODO: Update value to match your plugin's package name.
 val pluginPackageName = "com.sakuya.godot_taptap"
 
@@ -39,18 +39,25 @@ android {
 }
 
 dependencies {
-    implementation("org.godotengine:godot:4.2.1.stable")
+    implementation("org.godotengine:godot:4.2.0.stable")
 
-    compileOnly(files("libs/TapBootstrap_3.27.0.aar"))
-    compileOnly(files("libs/TapCommon_3.27.0.aar"))
-    compileOnly(files("libs/TapLogin_3.27.0.aar"))
-    compileOnly(files("libs/AntiAddiction_3.27.0.aar"))
-    compileOnly(files("libs/AntiAddictionUI_3.27.0.aar"))
-    compileOnly(files("libs/TapConnect_3.27.0.aar"))
-    compileOnly(files("libs/TapMoment_3.27.0.aar"))
+    compileOnly(files("libs/TapBootstrap_$tapVersion.aar"))
+    compileOnly(files("libs/TapCommon_$tapVersion.aar"))
+    compileOnly(files("libs/TapLogin_$tapVersion.aar"))
+    compileOnly(files("libs/AntiAddiction_$tapVersion.aar"))
+    compileOnly(files("libs/AntiAddictionUI_$tapVersion.aar"))
+    compileOnly(files("libs/TapConnect_$tapVersion.aar"))
+    compileOnly(files("libs/TapMoment_$tapVersion.aar"))
+    compileOnly(files("libs/TapAD_3.16.3.25h1.aar"))
 
     compileOnly("cn.leancloud:storage-android:8.2.19")
     compileOnly("cn.leancloud:realtime-android:8.2.19")
+    compileOnly("com.squareup.okhttp3:okhttp:3.12.1")
+//    compileOnly("com.android.support:appcompat-v7:28.0.0")
+    compileOnly ("com.android.support:support-annotations:28.0.0")
+//    compileOnly ("com.android.support:support-v4:28.0.0")
+    compileOnly ("com.github.bumptech.glide:glide:4.9.0")
+//    compileOnly("com.android.support:recyclerview-v7:28.0.0")
 }
 
 // BUILD TASKS DEFINITION
@@ -71,13 +78,14 @@ val copyReleaseAARToDemoAddons by tasks.registering(Copy::class) {
 val copyLibsAARToDemoAddons by tasks.registering(Copy::class) {
     description = "Copies the generated release AAR binary to the plugin's addons directory"
     from("libs")
-    include("TapBootstrap_3.27.0.aar")
-    include("TapCommon_3.27.0.aar")
-    include("TapLogin_3.27.0.aar")
-    include("AntiAddiction_3.27.0.aar")
-    include("AntiAddictionUI_3.27.0.aar")
-    include("TapConnect_3.27.0.aar")
-    include("TapMoment_3.27.0.aar")
+    include("TapBootstrap_$tapVersion.aar")
+    include("TapCommon_$tapVersion.aar")
+    include("TapLogin_$tapVersion.aar")
+    include("AntiAddiction_$tapVersion.aar")
+    include("AntiAddictionUI_$tapVersion.aar")
+    include("TapConnect_$tapVersion.aar")
+    include("TapMoment_$tapVersion.aar")
+    include("TapAD_3.16.3.25h1.aar")
     into("demo/addons/$pluginName/bin")
 }
 

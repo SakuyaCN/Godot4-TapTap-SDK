@@ -3,8 +3,11 @@ package com.sakuya.godot_taptap
 import android.util.Log
 import android.widget.Toast
 import com.sakuya.godot_taptap.taptap.GodotTapTap
+import com.sakuya.godot_taptap.taptap.TapAdNativeHelper
 import com.tapsdk.antiaddictionui.AntiAddictionUIKit
+import com.tapsdk.antiaddictionui.utils.ToastUtils
 import com.tapsdk.moment.TapMoment
+import com.tapsdk.tapad.TapAdNative
 import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.SignalInfo
@@ -21,7 +24,8 @@ class GodotAndroidPlugin(godot: Godot): GodotPlugin(godot) {
         return mutableSetOf(
             SignalInfo("onLoginResult",Integer::class.java,String::class.java),
             SignalInfo("onAntiAddictionCallback",Integer::class.java),
-            SignalInfo("onTapMomentCallBack",Integer::class.java)
+            SignalInfo("onTapMomentCallBack",Integer::class.java),
+            SignalInfo("onRewardVideoAdCallBack",Integer::class.java)
         )
     }
 
@@ -58,8 +62,6 @@ class GodotAndroidPlugin(godot: Godot): GodotPlugin(godot) {
                     if (code != null){
                         emitSignal("onTapMomentCallBack",code)
                     }
-                    Log.e("aaaaaa",code.toString())
-                    Log.e("aaaaaa",msg)
                 }
             }
         }
@@ -141,5 +143,37 @@ class GodotAndroidPlugin(godot: Godot): GodotPlugin(godot) {
     @UsedByGodot
     private fun momentOpen(ori:Int = TapMoment.ORIENTATION_DEFAULT){
         godotTapTap?.momentOpen(ori)
+    }
+
+    /**
+     * adn初始化
+     */
+    @UsedByGodot
+    private fun adnInit(mediaId:Long,mediaName:String,mediaKey:String){
+        activity?.let {
+            godotTapTap?.adnInit(it,mediaId,mediaName,mediaKey)
+        }
+    }
+
+    /**
+     * 激励广告初始化
+     */
+    @UsedByGodot
+    private fun initRewardVideoAd(spaceId:Int,rewardName:String,extraInfo:String,userId:String){
+        activity?.let {
+            TapAdNativeHelper.initAd(it,spaceId,rewardName,extraInfo,userId){code ->
+                emitSignal("onRewardVideoAdCallBack",code)
+            }
+        }
+    }
+
+    /**
+     * 展示激励广告
+     */
+    @UsedByGodot
+    private fun showRewardVideoAd(){
+        activity?.let {
+            TapAdNativeHelper.showAd(it)
+        }
     }
 }
